@@ -2,11 +2,18 @@ package com.neo.web;
 
 import com.neo.model.User;
 import com.neo.service.UserService;
+import com.neo.util.JsonUtil;
+import com.neo.util.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,11 +28,32 @@ public class UserController {
         return "redirect:/list";
     }
 
-    @RequestMapping("/list")
-    public String list(Model model) {
-        List<User> users=userService.getUserList();
-        model.addAttribute("users", users);
+    @RequestMapping(value = "/list")
+    public String list(){
         return "user/list";
+    }
+
+    @RequestMapping(value = "/getUserList")
+    public void getUserList(HttpServletResponse response) {
+        List<User> list = userService.getUserList();
+        try {
+            if(list == null || list.isEmpty()) {
+                JsonUtil.toJson(new Result(false, 7000, "没有数据", null), response);
+                return;
+            }
+            List<User> userList = new ArrayList<>();
+            Result result = new Result(true, 200, "成功",list);
+            JsonUtil.toJson(result,response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/getUserList1")
+    @ResponseBody
+    public List getUserList1(HttpServletResponse response) {
+        List<User> list = userService.getUserList();
+        return list;
     }
 
     @RequestMapping("/toAdd")
@@ -53,9 +81,10 @@ public class UserController {
     }
 
 
-    @RequestMapping("/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
     public String delete(Long id) {
         userService.delete(id);
-        return "redirect:/list";
+        return "success";
     }
 }

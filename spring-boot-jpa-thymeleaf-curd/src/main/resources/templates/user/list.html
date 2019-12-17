@@ -3,41 +3,76 @@
 <head>
     <meta charset="UTF-8"/>
     <title>userList</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link th:href="@{/css/bootstrap-table.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/jquery-editable-select.css}" rel="stylesheet" />
 </head>
+<style>
+#toolbar {
+  margin: 0;
+}
+</style>
 <body class="container">
 <br/>
 <h1>用户列表</h1>
 <br/><br/>
 <div class="with:80%">
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>User Name</th>
-            <th>Password</th>
-            <th>Age</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr  th:each="user : ${users}">
-            <th scope="row" th:text="${user.id}">1</th>
-            <td th:text="${user.userName}">neo</td>
-            <td th:text="${user.password}">Otto</td>
-            <td th:text="${user.age}">6</td>
-            <td><a th:href="@{/toEdit(id=${user.id})}">edit</a></td>
-            <td><a th:href="@{/delete(id=${user.id})}">delete</a></td>
-        </tr>
-        </tbody>
-    </table>
 </div>
+
+<div id="toolbar" class="select">
+    <select class="form-control">
+        <option value="">Export Basic</option>
+        <option value="all">Export All</option>
+        <option value="selected">Export Selected</option>
+    </select>
+</div>
+
+<table id = "testTable"/>
+
+
+
 <div class="form-group">
     <div class="col-sm-2 control-label">
         <a href="/toAdd" th:href="@{/toAdd}" class="btn btn-info">add</a>
     </div>
 </div>
 
+<select id="editable-select" class="editable form-control">
+    <option>Alfa Romeo</option>
+    <option>Audi</option>
+    <option>BMW</option>
+    <option>Citroen</option>
+    <option value="-1">其他</option>
+</select>
+
+<div class="modal fade" id="modal-warning" tabindex="-1" role="dialog" aria-labelledby="modal-warning-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modal-warning-label">close</h4>
+            </div>
+            <div class="modal-body">
+                <h5>确认删除这条记录吗？</h5>
+                <input type="hidden" name="hiddenValue" id="hiddenValue" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="confirm">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/userManage.js}"></script>
+
+<script th:src="@{/js/tableExport.min.js}"></script>
+<script th:src="@{/js/bootstrap-table.min.js}"></script>
+<script th:src="@{/js/bootstrap-table-locale-all.min.js}"></script>
+<script th:src="@{js/bootstrap-table-export.min.js}"></script>
+<script th:src="@{js/jspdf.min.js}"></script>
+<script th:src="@{js/jspdf.plugin.autotable.js}"></script>
+<script th:src="@{/js/jquery-editable-select.js}"></script>
 </body>
 </html>
